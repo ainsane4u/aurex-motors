@@ -1,9 +1,9 @@
-const { useState, useEffect, useRef } = window.React;
+const { useState, useEffect, useRef } = React;
 const { motion, useScroll, useSpring, useTransform } = window.Motion;
-const React = window.React;
+
 const TOTAL_FRAMES = 150;
 const imagePaths = Array.from({ length: TOTAL_FRAMES }, (_, i) => 
-  './frame_${i}.webp'
+  `./frame_${i}.webp`
 );
 
 const SERVICES_DATA = [
