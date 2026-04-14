@@ -3,15 +3,15 @@ const { motion, useScroll, useSpring, useTransform } = window.Motion;
 
 const TOTAL_FRAMES = 150;
 const imagePaths = Array.from({ length: TOTAL_FRAMES }, (_, i) => 
-  `./public/sequence/frame_${i}.webp`
+  `./sequence/frame_${i}.webp`
 );
 
 const SERVICES_DATA = [
-  { id: "01", category: "ADVANCED CONFIGURATION", desc: "// [Hyper-personalize your dynamic chassis setup.]", img: "./public/sequence/frame_25.webp" },
-  { id: "02", category: "DIGITAL DIAGNOSTICS", desc: "// [Remote OTA scanning with zero latency.]", img: "./public/sequence/frame_50.webp" },
-  { id: "03", category: "VELOCITY INTEGRATION", desc: "// [Optimized battery core alignment for 2,000HP output.]", img: "./public/sequence/frame_75.webp" },
-  { id: "04", category: "AERO-MORPHIC TUNING", desc: "// [Adjust active surface response curves.]", img: "./public/sequence/frame_100.webp" },
-  { id: "05", category: "VOID RESERVATION", desc: "// [Secure your exclusive build slot.]", img: "./public/sequence/frame_125.webp" }
+  { id: "01", category: "ADVANCED CONFIGURATION", desc: "// [Hyper-personalize your dynamic chassis setup.]", img: "./sequence/frame_25.webp" },
+  { id: "02", category: "DIGITAL DIAGNOSTICS", desc: "// [Remote OTA scanning with zero latency.]", img: "./sequence/frame_50.webp" },
+  { id: "03", category: "VELOCITY INTEGRATION", desc: "// [Optimized battery core alignment for 2,000HP output.]", img: "./sequence/frame_75.webp" },
+  { id: "04", category: "AERO-MORPHIC TUNING", desc: "// [Adjust active surface response curves.]", img: "./sequence/frame_100.webp" },
+  { id: "05", category: "VOID RESERVATION", desc: "// [Secure your exclusive build slot.]", img: "./sequence/frame_125.webp" }
 ];
 
 
