@@ -3,7 +3,7 @@ const { motion, useScroll, useSpring, useTransform } = window.Motion;
 
 const TOTAL_FRAMES = 150;
 const imagePaths = Array.from({ length: TOTAL_FRAMES }, (_, i) => 
-  `./sequence/frame_${i}.webp`
+  './frame_${i}.webp'
 );
 
 const SERVICES_DATA = [
