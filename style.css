@@ -1,0 +1,845 @@
+/* CSS Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #050505;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    /* overflow-x: hidden removed to prevent breaking sticky positioning */
+    overscroll-behavior: none; /* Prevent scroll bouncing on mobile */
+}
+
+/* Ambient Red Glow mapped to the whole layout, as requested */
+.ambient-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle, rgba(128,0,0,0.15) 0%, rgba(5,5,5,1) 70%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.scroll-container {
+    position: relative; /* REQUIRED FOR STICKY TO WORK CORRECTLY */
+    width: 100%;
+    height: 800vh; /* Increased scroll reach */
+    margin: 0;
+    padding: 0;
+    /* overflow-x: hidden removed to prevent breaking sticky positioning */
+}
+
+/* The sticky container to hold layout in viewport */
+.sticky-wrapper {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100svh;
+    overflow: hidden;
+}
+
+/* Canvas perfectly filling the viewport while containing internal aspect ratio */
+.canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Changed back to 1 as requested */
+}
+
+.render-canvas {
+    width: 100vw;
+    height: 100svh;
+    object-fit: cover; /* Exact requested match for scaling */
+    pointer-events: none;
+}
+
+/* Overlaying UI that holds the panels */
+.ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    display: flex;
+}
+
+.panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1280px; /* Max-w-7xl constraint */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 5vw; /* edge buffer */
+    /* Framer Motion takes care of opacity and transform overrides */
+}
+
+.panel.center {
+    align-items: center;
+    text-align: center;
+}
+
+.panel.left {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.panel.right {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.panel.bottom-end {
+    justify-content: flex-end;
+    padding-bottom: 15vh;
+}
+
+/* High-end tracking typography */
+.title {
+    font-size: clamp(3rem, 8vw, 8rem);
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.9); /* As requested */
+    text-transform: uppercase;
+}
+
+.heading {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 0 rgba(128,0,0,0.4), 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.subtext {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 1);
+    line-height: 1.6;
+}
+
+/* Polished Preorder button */
+.preorder-btn {
+    pointer-events: auto;
+    background: rgba(10, 10, 10, 0.8);
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    padding: 1rem 3rem;
+    border: 1px solid rgba(128, 0, 0, 0.5); /* Crimson border base */
+    border-radius: 2px;
+    letter-spacing: 0.3em;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 0 15px rgba(180, 0, 0, 0.3); /* Crimson glow */
+    backdrop-filter: blur(8px);
+    text-transform: uppercase;
+}
+
+.preorder-btn:hover {
+    background: rgba(200, 0, 0, 0.15);
+    border: 1px solid rgba(255, 20, 20, 1);
+    box-shadow: 0 0 35px rgba(255, 0, 0, 0.6);
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* Layout constraint for mobile layout logic */
+@media (max-width: 768px) {
+    .panel.left {
+        align-items: center;
+        text-align: center;
+        justify-content: flex-end;
+        padding-bottom: 30vh;
+    }
+    .panel.right {
+        align-items: center;
+        text-align: center;
+        justify-content: flex-start;
+        padding-top: 25vh;
+    }
+}
+
+/* ======== NEW SECTIONS ======== */
+
+/* Specs Section */
+.specs-section {
+    position: relative;
+    z-index: 20; /* Force z-index 20 */
+    margin: -100vh 0 0 0; /* Overlap the end of the 800vh animation perfectly */
+    padding: 10vh 5vw 10vh; 
+    background-color: #050505;
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    text-transform: uppercase;
+}
+
+.section-title {
+    font-size: clamp(1rem, 1.5vw, 2rem);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    margin-bottom: 4rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.spec-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 2rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.4s ease;
+    cursor: default;
+}
+
+.spec-item:last-child {
+    border-right: none;
+}
+
+.spec-item:hover {
+    background: rgba(128, 0, 0, 0.05); /* Hover glow effect background */
+    box-shadow: inset 0 0 40px rgba(128, 0, 0, 0.3); /* Inner glow */
+}
+
+.spec-label {
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 1.5rem;
+}
+
+.spec-value {
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 900;
+    letter-spacing: 0.1em;
+}
+
+/* Manifesto Section */
+.manifesto-section {
+    position: relative;
+    z-index: 10;
+    padding: 25vh 5vw;
+    background-color: #050505;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.manifesto-quote {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300; /* Light weight of the Japanese font */
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.4); /* 40% opacity */
+    text-transform: uppercase;
+    max-width: 80%;
+    line-height: 1.6;
+}
+
+/* Services Section */
+.services-section {
+    position: relative;
+    z-index: 10;
+    padding: 10vh 5vw 10vh;
+    background-color: #050505;
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    text-transform: uppercase;
+}
+
+.services-list {
+    margin-top: 3rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.service-row {
+    position: relative;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.service-bg-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 5vw;
+}
+
+.service-glow {
+    position: absolute;
+    top: 50%;
+    right: 15vw;
+    transform: translateY(-50%);
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(128,0,0,0.2) 0%, rgba(5,5,5,0) 70%);
+    z-index: 1;
+}
+
+.service-bg-layer img {
+    height: 120%;
+    object-fit: contain;
+    z-index: 2;
+    opacity: 0.6;
+    mix-blend-mode: screen;
+}
+
+.service-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 3vw;
+}
+
+.service-id {
+    font-size: 0.9rem;
+    opacity: 0.4;
+    letter-spacing: 0.3em;
+    width: 40px;
+}
+
+.service-category {
+    font-size: 1.1rem;
+    letter-spacing: 0.4em;
+    font-weight: 700;
+    min-width: 300px;
+}
+
+.service-desc {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    letter-spacing: 0.1em;
+    font-weight: 300;
+}
+
+/* Liquid Chrome Section */
+.liquid-chrome-section {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    min-height: 80vh;
+    background-color: #050505;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    cursor: crosshair;
+}
+
+.chrome-mouse-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(200, 0, 0, 0.15) 0%, rgba(5, 5, 5, 0) 70%); /* Reduced glowing */
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3; /* Above text to reflect on it */
+    mix-blend-mode: screen;
+}
+
+.chrome-text-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.chrome-text {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(6rem, 18vw, 25rem);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    margin: 0;
+    line-height: 1;
+    
+    /* High-Contrast Chrome Surface */
+    background: linear-gradient(
+        to bottom,
+        #cccccc 0%,        /* Bright top edge */
+        #050505 30%,       /* Deep black */
+        #000000 49%,       /* Black right above horizon */
+        #ffffff 50%,       /* Intense pure white specular horizon */
+        #666666 52%,       /* Fast falloff */
+        #050505 80%,       /* Black bottom area */
+        #800000 100%       /* Crimson red lighting reflection */
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* Fine edges to simulate sharp chrome cuts */
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4); /* Increased edge brightness */
+    
+    /* Massive Drop Shadow Emboss */
+    filter: drop-shadow(0 -2px 1px rgba(255,255,255,0.25))
+            drop-shadow(0 15px 15px rgba(0,0,0,0.95))
+            drop-shadow(0 30px 40px rgba(0,0,0,1));
+            
+    position: relative;
+}
+
+/* Hard specular highlight on top using pseudo-element */
+.chrome-text::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 4;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(255, 255, 255, 0) 25%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px transparent; /* clear any inherited stroke */
+    pointer-events: none;
+}
+
+
+/* Blueprint Contact Section */
+.blueprint-contact-section {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #050505;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 10px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10vh 5vw;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #fff;
+    overflow: hidden;
+}
+
+.blueprint-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 600px;
+}
+
+/* SVG Wireframe and Lines */
+.blueprint-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.car-wireframe {
+    fill: transparent;
+    stroke: rgba(255, 255, 255, 0.15); /* 15% opacity wireframe requested */
+    stroke-width: 1;
+}
+
+.lead-line {
+    stroke: rgba(255, 255, 255, 0.2); /* 1px diagonal line */
+    stroke-width: 1;
+    transition: stroke 0.3s ease;
+}
+
+.lead-line.active {
+    stroke: #800000;
+}
+
+/* Floating Input Fields */
+.blueprint-field {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 10;
+}
+
+.name-field {
+    top: 50px;
+    left: 0;
+    width: 200px;
+}
+
+.email-field {
+    top: 450px;
+    left: 0;
+    width: 200px;
+}
+
+.message-field {
+    top: 100px;
+    right: 0;
+    width: 250px;
+}
+
+.field-label {
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+}
+
+/* Crosshair Input Styles */
+.crosshair-input {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    padding: 0.8rem 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    position: relative;
+    width: 100%;
+    resize: none;
+    
+    /* Crosshair corners hack using gradient backgrounds */
+    background-image: 
+      linear-gradient(#fff, #fff), linear-gradient(#fff, #fff),
+      linear-gradient(#fff, #fff), linear-gradient(#fff, #fff),
+      linear-gradient(#fff, #fff), linear-gradient(#fff, #fff),
+      linear-gradient(#fff, #fff), linear-gradient(#fff, #fff);
+    background-size: 5px 1px, 1px 5px, 5px 1px, 1px 5px, 5px 1px, 1px 5px, 5px 1px, 1px 5px;
+    background-position: 
+      0 0, 0 0, 
+      100% 0, 100% 0, 
+      0 100%, 0 100%, 
+      100% 100%, 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.crosshair-input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.blueprint-field:hover .crosshair-input,
+.crosshair-input:focus {
+    border-color: #800000;
+    box-shadow: inset 0 0 15px rgba(128, 0, 0, 0.1), 0 0 15px rgba(128, 0, 0, 0.1);
+    
+    /* Match crosshairs on hover */
+    background-image: 
+      linear-gradient(#800000, #800000), linear-gradient(#800000, #800000),
+      linear-gradient(#800000, #800000), linear-gradient(#800000, #800000),
+      linear-gradient(#800000, #800000), linear-gradient(#800000, #800000),
+      linear-gradient(#800000, #800000), linear-gradient(#800000, #800000);
+}
+
+/* Action Area */
+.blueprint-submit-area {
+    position: absolute;
+    bottom: 50px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    z-index: 10;
+}
+
+.submit-flicker-code {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.3);
+    font-family: 'Geist Mono', monospace; /* Tech code font */
+    animation: flicker-text 0.15s infinite alternate;
+}
+
+@keyframes flicker-text {
+    0% { opacity: 0.5; color: rgba(255, 255, 255, 0.3); }
+    100% { opacity: 1; color: rgba(255, 255, 255, 0.6); }
+}
+
+.initialize-btn {
+    background: rgba(10, 10, 10, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    position: relative;
+    backdrop-filter: blur(5px);
+}
+
+.initialize-btn:hover {
+    background: rgba(128, 0, 0, 0.15);
+    border-color: #800000;
+    box-shadow: 0 0 25px rgba(128, 0, 0, 0.4);
+}
+
+/* Footer Section */
+.blueprint-footer {
+    position: relative;
+    z-index: 10;
+    background-color: #050505;
+    padding: 5rem 5vw;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #fff;
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-bg-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Subtle grid pattern */
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+    background-size: 30px 30px;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.footer-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.footer-left {
+    font-weight: 900;
+    font-size: 1.2rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.footer-center {
+    display: flex;
+    gap: 3rem;
+}
+
+.footer-center a {
+    color: #fff;
+    text-decoration: none;
+    font-variant: small-caps; /* small caps */
+    letter-spacing: 0.5em; /* 0.5em tracking */
+    font-size: 0.9rem;
+    font-weight: 400;
+    opacity: 0.7;
+    transition: all 0.3s ease; /* transition text shadow */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0 1rem;
+}
+
+.footer-center a:hover {
+    opacity: 1;
+    color: #fff;
+    text-shadow: 0 0 12px #800000, 0 0 24px rgba(128, 0, 0, 0.8);
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.icon-placeholder {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.icon-placeholder:hover {
+    opacity: 1;
+}
+
+.credit {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    opacity: 0.4;
+    display: flex;
+    align-items: center;
+}
+
+.credit-link {
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+    margin-left: 0.3em;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.credit-link::after {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.4);
+    margin-left: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.credit-link:hover {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.credit-link:hover::after {
+    background-color: #800000;
+    box-shadow: 0 0 8px #800000, 0 0 15px #800000;
+}
+
+/* Mobile adjustments */
+@media (max-width: 1024px) {
+    .specs-grid {
+        grid-template-columns: repeat(2, 1fr);
+        border: none;
+    }
+    .spec-item {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        margin: -1px 0 0 -1px; /* border collapse feel */
+    }
+    .spec-item:last-child {
+        border-right: 1px solid rgba(255, 255, 255, 0.15);
+    }
+}
+
+@media (max-width: 768px) {
+    .specs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-center {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .footer-right {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* ==== Mobile Blueprint Stack ==== */
+    .blueprint-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: auto; /* Remove hardcoded height */
+        padding-top: 5rem;
+        gap: 3rem;
+    }
+
+    .blueprint-svg {
+        position: relative;
+        height: 300px; /* Force small wireframe block */
+        margin-bottom: 2rem;
+    }
+
+    .lead-line {
+        display: none; /* Hide interactive lead lines on block layout to prevent breaking */
+    }
+
+    .blueprint-field {
+        position: relative !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-width: 400px;
+    }
+
+    .blueprint-submit-area {
+        position: relative !important;
+        bottom: 0 !important;
+        margin-top: 2rem;
+        flex-direction: column;
+    }
+}
+
+/* Fallback static glow for touch devices (disabling mouse-follow) */
+@media (hover: none) and (pointer: coarse) {
+    .chrome-mouse-glow {
+        display: none !important; /* disabled */
+    }
+
+    .chrome-text-container::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(200, 0, 0, 0.4) 0%, rgba(5, 5, 5, 0) 70%);
+        pointer-events: none;
+        z-index: -1;
+    }
+}
